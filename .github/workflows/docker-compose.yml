@@ -1,0 +1,40 @@
+#name: CI/CD Pipeline
+#
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps: 
+#      - name: Checkout repositorio
+#      - uses: actions/checkout@v2
+#
+#      - name: login en Docker Hub
+#      - run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+#
+#      - name: Build y Push Docker Images
+#      - run: |
+#          docker build -t "${{ secrets.DOCKER_USERNAME }}"/flaskapp:1.0.0 .
+#          docker push "${{ secrets.DOCKER_USERNAME }}"/flaskapp:1.0.0
+#
+#  deploy:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: SSH y deploy
+#      - uses: appleboy/ssh-actions@v0.1.1
+#        with:
+#          host: "${{ secrets.VM_HOST }}"
+#          username: "${{ secrets.VM_USERNAME }}"
+#          key: "${{ secrets.VM_PRIVATE_KEY }}"
+#          script:
+#            cd /app
+#            docker compose pull
+#            docker compose up -d
+
+
+
