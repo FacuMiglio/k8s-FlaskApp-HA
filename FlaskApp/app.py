@@ -15,7 +15,7 @@ def get_db_connection():
 
 @app.route('/')
 def home():
-    return jsonify({"message" : "Bienvenido a Flaskapp!"})
+    return jsonify({"message" : "Bienvenido a Flaskapp!!"})
     #return render_template('index.html')
 
 
