@@ -1,7 +1,7 @@
 apiVersion: kustomization.config.k8s.io/v1beta1
 kind: Namespace
 namespace: prod
-bases:
+resources:
   - ../../base
 commonLabels:
   env: prod

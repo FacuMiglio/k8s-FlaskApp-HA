@@ -28,3 +28,9 @@ curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trust
 ## Iniciar Minikube
 minikube start --cpus=2 --memory=4096 --driver=docker
 
+# Autenticar Ngrok
+ngrok config add-authtoken YOUR_NGROK_TOKEN
+
+# Exponer el servicio de Ingress de Minikube
+INGRESS_PORT=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o jsonpath='{.spec.ports[0].nodePort}')
+ngrok http $INGRESS_PORT
