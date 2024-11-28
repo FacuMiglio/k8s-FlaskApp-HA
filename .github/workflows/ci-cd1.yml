@@ -22,15 +22,15 @@ jobs:
       steps:
         - uses: actions/checkout@v3 
       
-        - name: Install SSH key
-          uses: shimataro/ssh-key-action@v
-          with:
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            known_hosts: 'VM-CON-MINIKUBE'
-
-        - name: Adding Known Hosts
-          run: |
-            ssh-keyscan -H ${{ env.SERVEO_HOST }} >> ~/.ssh/known_hosts
+        #- name: Install SSH key
+        #  uses: shimataro/ssh-key-action@v
+        #  with:
+        #    key: ${{ secrets.SSH_PRIVATE_KEY }}
+        #    known_hosts: 'VM-CON-MINIKUBE'
+#
+        #- name: Adding Known Hosts
+        #  run: |
+        #    ssh-keyscan -H ${{ env.SERVEO_HOST }} >> ~/.ssh/known_hosts
           
         - name: Deploy to Minikube
           run: |
