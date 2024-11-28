@@ -3,8 +3,8 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ dev, stg, prod, infra, main ]
-  pull-request:
-    branches: [ dev, stg, prod, infra, main ]
+  #pull-request:
+  #  branches: [ dev, stg, prod, infra, main ]
 
 env:
     DOCKERHUB_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
@@ -13,6 +13,7 @@ env:
     DOCKERHUB_TOKEN: "${{ secrets.DOCKER_TOKEN }}"
     NAMESPACE: ${{ github.ref_name }}
     IMAGE_TAG: ${{ github.ref_name }}
+    SERVEO_HOST: "facu"
 
 jobs:
 
