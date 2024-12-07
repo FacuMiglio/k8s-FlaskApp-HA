@@ -26,11 +26,11 @@ jobs:
         - name: Install Tailscale
           run: |
             curl -fsSL https://tailscale.com/install.sh | sh
-            sudo tailscale up --authkey=${{ secrets.TAILSCALE_AUTH_TOKEN }}
+            sudo tailscale up --authkey=${{ secrets.TAILSCALE_AUTH_TOKEN }} --accept-dns=false
   
         - name: Connect to VM via Tailscale
           run: |
-            ssh -o StrictHostKeyChecking=no root@facu.tail5d0411.ts.net --accept-dns=false
+            ssh -o StrictHostKeyChecking=no root@facu.tail5d0411.ts.net 
             echo "Connected to Private VM!"
       
         #- name: Install SSH key
