@@ -30,7 +30,7 @@ jobs:
   
         - name: Connect to VM via Tailscale
           run: |
-            ssh -o StrictHostKeyChecking=no root@facu.tail5d0411.ts.net 
+            ssh -o StrictHostKeyChecking=no root@facu
             echo "Connected to Private VM!"
       
         #- name: Install SSH key
