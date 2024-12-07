@@ -13,6 +13,7 @@ env:
     DOCKERHUB_TOKEN: "${{ secrets.DOCKER_TOKEN }}"
     NAMESPACE: ${{ github.ref_name }}
     IMAGE_TAG: ${{ github.ref_name }}
+    YOUR_TAILNET_NAME: 
 
 jobs:
 
@@ -29,7 +30,8 @@ jobs:
   
         - name: Connect to VM via Tailscale
           run: |
-            ssh -o StrictHostKeyChecking=no root@facu.tail5d0411.ts.net "echo 'Connected to Private VM!'"
+            ssh -o StrictHostKeyChecking=no root@facu.tail5d0411.ts.net --accept-dns=false
+            echo "Connected to Private VM!"
       
         #- name: Install SSH key
         #  uses: shimataro/ssh-key-action@v
@@ -100,5 +102,14 @@ jobs:
 #            git pull
 #            kubectl apply -k overlays/${{ env.NAMESPACE }}/ -n ${{ env.NAMESPACE }}
 #          " 
-  
+
+        - name: Remove Tailscale Device
+          run: |
+            DEVICE_ID=$(curl -s -X GET \
+              -H "Authorization: Bearer ${{ secrets.TAILSCALE_API_KEY }}" \
+              "https://api.tailscale.com/api/v2/tailnet/YOUR_TAILNET_NAME/devices" | jq -r '.devices[] | select(.hostname=="runner-hostname").id')
+            curl -X DELETE \
+              -H "Authorization: Bearer ${{ secrets.TAILSCALE_API_KEY }}" \
+              "https://api.tailscale.com/api/v2/tailnet/YOUR_TAILNET_NAME/devices/$DEVICE_ID"
+   
 
