@@ -13,7 +13,7 @@ env:
     DOCKERHUB_TOKEN: "${{ secrets.DOCKER_TOKEN }}"
     NAMESPACE: ${{ github.ref_name }}
     IMAGE_TAG: ${{ github.ref_name }}
-    YOUR_TAILNET_NAME: 
+    YOUR_TAILNET_NAME: facundomiglio@gmail.com
 
 jobs:
 
@@ -32,6 +32,22 @@ jobs:
           run: |
             ssh -o StrictHostKeyChecking=no root@100.70.9.102
             echo "Connected to Private VM!"
+
+            export KUBECONFIG=/home/${{ secrets.SSH_USERNAME }}/.kube/config
+            kubectl get namespace ${{ env.NAMESPACE }} || kubectl create namespace ${{ env.NAMESPACE }}
+            git pull
+            cd /k8s-flaskapp-ha/k8s/base
+            kubectl apply -f . -n ${{ env.NAMESPACE }}            
+
+            echo "Remove Tailscale Device"
+          
+            DEVICE_ID=$(curl -s -X GET \
+              -H "Authorization: Bearer ${{ secrets.TAILSCALE_API_KEY }}" \
+              "https://api.tailscale.com/api/v2/tailnet/${{ env.YOUR_TAILNET_NAME }}/devices" | jq -r '.devices[] | select(.hostname=="runner-hostname").id')
+            
+              curl -X DELETE \
+              -H "Authorization: Bearer ${{ secrets.TAILSCALE_API_KEY }}" \
+              "https://api.tailscale.com/api/v2/tailnet/${{ env.YOUR_TAILNET_NAME }}/devices/$DEVICE_ID"
       
         #- name: Install SSH key
         #  uses: shimataro/ssh-key-action@v
@@ -103,13 +119,6 @@ jobs:
 #            kubectl apply -k overlays/${{ env.NAMESPACE }}/ -n ${{ env.NAMESPACE }}
 #          " 
 
-        #- name: Remove Tailscale Device
-        #  run: |
-        #    DEVICE_ID=$(curl -s -X GET \
-        #      -H "Authorization: Bearer ${{ secrets.TAILSCALE_API_KEY }}" \
-        #      "https://api.tailscale.com/api/v2/tailnet/YOUR_TAILNET_NAME/devices" | jq -r '.devices[] | select(.hostname=="runner-hostname").id')
-        #    curl -X DELETE \
-        #      -H "Authorization: Bearer ${{ secrets.TAILSCALE_API_KEY }}" \
-        #      "https://api.tailscale.com/api/v2/tailnet/YOUR_TAILNET_NAME/devices/$DEVICE_ID"
-   #
+
+   
 
